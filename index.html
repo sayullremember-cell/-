@@ -18,7 +18,9 @@
             --bg: #000000;
         }
 
-        body {
+        body 
+
+        {
             margin: 0;
             overflow: hidden;
             background-color: var(--bg);
@@ -167,6 +169,21 @@
             h1 { font-size: 32px; }
         }
     </style>
+    <script>
+    // 这是一个独立的安全脚本，即使 Three.js 加载失败也能运行
+    window.forceStart = function() {
+        var loader = document.getElementById('loader');
+        if(loader) {
+            loader.style.opacity = '0';
+            setTimeout(function() { 
+                loader.remove(); 
+            }, 800);
+        }
+        // 设置一个全局标记，告诉后面的程序如果它活着的话，就用鼠标模式
+        window.FORCE_MOUSE_MODE = true;
+        console.log("强制跳过 Loading...");
+    }
+</script>
 
     <!-- Import Map -->
     <script type="importmap">
@@ -219,15 +236,16 @@
 
         // --- GLOBAL STATE ---
         const STATE = {
-            mode: 'TREE', // TREE, SCATTER, FOCUS
-            rotation: { x: 0, y: 0 },
-            targetPhotoIndex: -1,
-            time: 0,
-            usingMouse: false // Fallback flag
-        };
+    mode: 'TREE', 
+    rotation: { x: 0, y: 0 },
+    targetPhotoIndex: -1,
+    time: 0,
+    // 如果刚才点击了强制跳过，这里会自动识别为 true
+    usingMouse: window.FORCE_MOUSE_MODE || false 
+};
 
         // Global Force Start for Loader Skip
-        window.forceStart = () => {
+      
             const loader = document.getElementById('loader');
             if(loader) {
                 loader.style.opacity = '0';
