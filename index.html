@@ -3,227 +3,285 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pink Gold Tree (Safe Mode)</title>
+    <title>Pink Gold Ultimate Dream</title>
     
     <style>
         body { margin: 0; overflow: hidden; background-color: #050005; font-family: 'Times New Roman', serif; user-select: none; }
         
-        /* Loading 界面 */
+        /* 1. 华丽的 Loading (紫色极光) */
         #loader { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: #1a001a; 
-            z-index: 999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1s; 
+            background: linear-gradient(135deg, #1a001a 0%, #000 100%);
+            z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 1s; 
         }
         .spinner { 
-            width: 50px; height: 50px; border: 3px solid rgba(255, 105, 180, 0.2); 
-            border-top: 3px solid #ff69b4; border-radius: 50%; 
+            width: 70px; height: 70px; 
+            border: 2px solid rgba(255, 20, 147, 0.2); 
+            border-top: 2px solid #ff1493; 
+            border-bottom: 2px solid #ffd700;
+            border-radius: 50%; 
             animation: spin 1s infinite linear; 
+            box-shadow: 0 0 40px rgba(255, 20, 147, 0.5); 
         }
-        /* 改个新名字，让你确认代码更新了 */
-        .loading-text { color: #ff69b4; margin-top: 20px; font-size: 14px; font-weight: bold; letter-spacing: 2px; }
+        .loading-text { 
+            color: #ff69b4; margin-top: 25px; letter-spacing: 4px; font-size: 14px; 
+            text-shadow: 0 0 10px #ff1493; font-weight: bold;
+        }
         
-        /* 标题 */
+        /* 2. 高端标题 */
         h1 { 
             position: absolute; top: 30px; width: 100%; text-align: center; 
-            background: linear-gradient(to bottom, #fff, #ff69b4, #ffd700); -webkit-background-clip: text; color: transparent;
-            font-size: 40px; text-shadow: 0 0 30px rgba(255, 105, 180, 0.8); z-index: 10; pointer-events: none;
+            background: linear-gradient(to bottom, #fff, #ffb6c1, #ffd700); -webkit-background-clip: text; color: transparent;
+            font-size: 56px; text-shadow: 0 0 50px rgba(255, 105, 180, 0.8); z-index: 10; font-weight: 100; letter-spacing: 8px; margin: 0; pointer-events: none;
         }
 
-        /* 调试控制台 (如果出错会显示在左上角) */
-        #debug-console {
-            position: fixed; top: 0; left: 0; padding: 10px; color: red; font-size: 12px; z-index: 10000;
-            background: rgba(0,0,0,0.8); display: none; max-width: 300px; word-wrap: break-word;
+        /* 3. 底部交互提示 */
+        #controls { position: absolute; bottom: 40px; width: 100%; text-align: center; z-index: 10; }
+        .btn {
+            background: rgba(0,0,0,0.6); border: 1px solid #ffd700; color: #ffd700;
+            padding: 15px 40px; font-size: 16px; cursor: pointer; transition: 0.3s;
+            border-radius: 50px; backdrop-filter: blur(10px); letter-spacing: 2px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
         }
+        .btn:hover { background: #ffd700; color: #000; box-shadow: 0 0 50px #ffd700; transform: scale(1.05); }
 
         @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 
-    <!-- 1. 使用国内最稳的 Staticfile CDN 加载 Three.js -->
-    <script src="https://cdn.staticfile.org/three.js/r128/three.min.js"></script>
-    <!-- 特效库 -->
-    <script src="https://cdn.staticfile.org/three.js/r128/examples/js/shaders/CopyShader.js"></script>
-    <script src="https://cdn.staticfile.org/three.js/r128/examples/js/shaders/LuminosityHighPassShader.js"></script>
-    <script src="https://cdn.staticfile.org/three.js/r128/examples/js/postprocessing/EffectComposer.js"></script>
-    <script src="https://cdn.staticfile.org/three.js/r128/examples/js/postprocessing/ShaderPass.js"></script>
-    <script src="https://cdn.staticfile.org/three.js/r128/examples/js/postprocessing/RenderPass.js"></script>
-    <script src="https://cdn.staticfile.org/three.js/r128/examples/js/postprocessing/UnrealBloomPass.js"></script>
-
+    <!-- 核心库 (BootCDN 国内极速源) -->
+    <script src="https://cdn.bootcdn.net/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/three.js/r128/examples/js/shaders/CopyShader.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/three.js/r128/examples/js/shaders/LuminosityHighPassShader.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/three.js/r128/examples/js/postprocessing/EffectComposer.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/three.js/r128/examples/js/postprocessing/ShaderPass.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/three.js/r128/examples/js/postprocessing/RenderPass.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/three.js/r128/examples/js/postprocessing/UnrealBloomPass.js"></script>
 </head>
 <body>
 
-    <div id="debug-console"></div>
-
     <div id="loader">
         <div class="spinner"></div>
-        <div class="loading-text">VERSION: UNSTOPPABLE PINK 🌸</div>
-        <div style="color: #666; font-size: 10px; margin-top: 10px;">(Auto-skip in 3s if stuck)</div>
+        <div class="loading-text">RENDERING HIGH-END VISUALS...</div>
     </div>
 
     <h1>Merry Christmas</h1>
+    
+    <div id="controls">
+        <button class="btn" onclick="toggleMode()">✨ MAGIC INTERACTION ✨</button>
+        <div style="margin-top:12px; color:#ffb6c1; font-size:12px; opacity:0.8;">Mouse Move to Rotate • Click to Explode</div>
+    </div>
 
     <script>
-        // === 1. 安全阀机制 (保命代码) ===
-        // 如果 3 秒后 loader 还在，强制把它关掉，并显示可能的原因
-        setTimeout(function() {
-            var loader = document.getElementById('loader');
-            if (loader && loader.style.opacity !== '0') {
-                loader.style.opacity = 0;
-                setTimeout(() => loader.remove(), 1000);
-                console.log("Force removed loader.");
-            }
-        }, 3000);
+        // === 强制清除 Loading (保命) ===
+        setTimeout(() => {
+            const l = document.getElementById('loader');
+            if(l) l.style.opacity = 0;
+            setTimeout(() => { if(l) l.remove() }, 1000);
+        }, 5000); // 给它5秒加载高清资源
 
-        // === 2. 错误捕捉 ===
-        window.onerror = function(msg, url, line) {
-            var consoleDiv = document.getElementById('debug-console');
-            consoleDiv.style.display = 'block';
-            consoleDiv.innerHTML += "❌ Error: " + msg + "<br>";
-        };
-
-        // === 3. 主程序 ===
-        window.onload = function() {
-            initScene();
-        };
-
+        // === 主程序 ===
         let scene, camera, renderer, composer, mainGroup;
         let particles = [];
+        let mode = 'TREE';
         let time = 0;
         let mouseX = 0, mouseY = 0;
 
-        function initScene() {
-            // 检查 Three.js 是否加载
-            if (typeof THREE === 'undefined') {
-                document.getElementById('debug-console').style.display = 'block';
-                document.getElementById('debug-console').innerHTML = "❌ FATAL: Three.js failed to load from CDN.";
-                return;
-            }
+        window.onload = init;
+
+        function init() {
+            if (typeof THREE === 'undefined') return;
 
             // 1. 场景
             scene = new THREE.Scene();
-            scene.fog = new THREE.FogExp2(0x050005, 0.02);
+            scene.fog = new THREE.FogExp2(0x050005, 0.015); // 更深邃的背景雾
 
             // 2. 相机
             camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.set(0, 5, 50);
 
-            // 3. 渲染器
-            renderer = new THREE.WebGLRenderer({ antialias: false });
+            // 3. 渲染器 (开启物理光照)
+            renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: "high-performance" });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             renderer.toneMapping = THREE.ReinhardToneMapping;
+            renderer.toneMappingExposure = 1.5; // 提高曝光，更亮
             document.body.appendChild(renderer.domElement);
 
-            // 4. 环境贴图 (粉金渐变)
-            const canvas = document.createElement('canvas');
-            canvas.width = 256; canvas.height = 256;
-            const ctx = canvas.getContext('2d');
-            const grd = ctx.createLinearGradient(0,0,0,256);
-            grd.addColorStop(0, '#ffffff');
-            grd.addColorStop(0.4, '#ff69b4'); 
-            grd.addColorStop(0.7, '#ffd700');
-            grd.addColorStop(1, '#100010');
-            ctx.fillStyle = grd; ctx.fillRect(0,0,256,256);
-            const envMap = new THREE.CanvasTexture(canvas);
+            // 4. 【核心】创建高级反射环境 (让金属看起来像金属)
+            const envC = document.createElement('canvas');
+            envC.width = 512; envC.height = 512;
+            const ctx = envC.getContext('2d');
+            const grd = ctx.createLinearGradient(0,0,0,512);
+            grd.addColorStop(0, '#ffffff');   // 顶光
+            grd.addColorStop(0.2, '#ff1493'); // 高光粉
+            grd.addColorStop(0.5, '#ffd700'); // 中间金
+            grd.addColorStop(0.8, '#4b0082'); // 底部紫
+            grd.addColorStop(1, '#000000');
+            ctx.fillStyle = grd; ctx.fillRect(0,0,512,512);
+            const envMap = new THREE.CanvasTexture(envC);
             envMap.mapping = THREE.EquirectangularReflectionMapping;
-            scene.environment = envMap;
+            scene.environment = envMap; // 全局应用
 
-            // 5. 灯光
-            const ambient = new THREE.AmbientLight(0xffffff, 0.2);
+            // 5. 电影级灯光
+            const ambient = new THREE.AmbientLight(0xffffff, 0.3);
             scene.add(ambient);
-            const spotGold = new THREE.SpotLight(0xffd700, 2);
-            spotGold.position.set(20, 50, 20);
-            scene.add(spotGold);
+
+            const goldSpot = new THREE.SpotLight(0xffd700, 2.5);
+            goldSpot.position.set(30, 50, 30);
+            goldSpot.penumbra = 0.5;
+            scene.add(goldSpot);
+
+            const pinkSpot = new THREE.SpotLight(0xff1493, 3); // 强粉色侧光
+            pinkSpot.position.set(-30, 20, -30);
+            scene.add(pinkSpot);
+            
+            const backlight = new THREE.PointLight(0x00ffff, 1, 50); // 背光轮廓
+            backlight.position.set(0, 10, -20);
+            scene.add(backlight);
 
             // 6. 创建树
             mainGroup = new THREE.Group();
             scene.add(mainGroup);
-            createTree();
+            createLuxuryTree();
+            createStardust();
 
-            // 7. 辉光
+            // 7. 强力辉光 (Bloom)
             if (THREE.EffectComposer) {
                 const renderPass = new THREE.RenderPass(scene, camera);
                 const bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
-                bloomPass.threshold = 0.15;
-                bloomPass.strength = 1.6;
-                bloomPass.radius = 0.8;
+                bloomPass.threshold = 0.15; // 很容易发光
+                bloomPass.strength = 1.8;   // 强度拉满
+                bloomPass.radius = 0.7;     // 光晕柔和
+                
                 composer = new THREE.EffectComposer(renderer);
                 composer.addPass(renderPass);
                 composer.addPass(bloomPass);
             }
 
-            // 8. 动画
+            // 8. 运行
             animate();
-            
-            // 9. 交互
             window.addEventListener('resize', onResize);
             window.addEventListener('mousemove', onMouseMove);
 
-            // 主动移除 Loading
+            // 移除 Loading
             const loader = document.getElementById('loader');
             loader.style.opacity = 0;
             setTimeout(() => loader.remove(), 1000);
         }
 
-        function createTree() {
-            // 材质：粉色钻石 & 金色
-            const geo = new THREE.OctahedronGeometry(0.35);
+        function createLuxuryTree() {
+            // 材质：超高光泽
             const matPink = new THREE.MeshStandardMaterial({
-                color: 0xff1493, roughness: 0.05, metalness: 0.9, envMapIntensity: 1.5
+                color: 0xff1493, roughness: 0.05, metalness: 0.95, envMapIntensity: 1.5,
+                emissive: 0x330011, emissiveIntensity: 0.2 // 自发光
             });
             const matGold = new THREE.MeshStandardMaterial({
-                color: 0xffd700, roughness: 0.1, metalness: 1.0, envMapIntensity: 2.0
+                color: 0xffd700, roughness: 0.02, metalness: 1.0, envMapIntensity: 2.0,
+                emissive: 0x332200, emissiveIntensity: 0.2
             });
 
-            // 树顶星
-            const topStar = new THREE.Mesh(new THREE.SphereGeometry(1.5), new THREE.MeshBasicMaterial({color:0xffd700}));
-            topStar.position.y = 19;
-            mainGroup.add(topStar);
+            // 几何体：像钻石一样的八面体
+            const geoDiamond = new THREE.OctahedronGeometry(0.3);
+            const geoSphere = new THREE.SphereGeometry(0.35, 16, 16);
+
+            // 树顶巨星
+            const topGeo = new THREE.IcosahedronGeometry(1.5, 0); // 水晶形状
+            const topMat = new THREE.MeshStandardMaterial({
+                color: 0xffd700, roughness: 0, metalness: 1, 
+                emissive: 0xffaa00, emissiveIntensity: 1 // 强自发光
+            });
+            const topper = new THREE.Mesh(topGeo, topMat);
+            topper.position.y = 19;
+            mainGroup.add(topper);
             
-            // 树顶发光
-            const topLight = new THREE.PointLight(0xffd700, 2, 20);
+            // 树顶光晕
+            const topLight = new THREE.PointLight(0xffaa00, 3, 20);
             topLight.position.y = 19;
             mainGroup.add(topLight);
 
-            for(let i=0; i<1800; i++) {
-                const isGold = Math.random() > 0.8;
-                const mesh = new THREE.Mesh(geo, isGold ? matGold : matPink);
-                
-                const t = i / 1800;
-                const angle = t * 50 * Math.PI;
-                const h = t * 36 - 18;
-                const r = 13 * (1 - Math.pow(t, 0.8));
+            // 3000个粒子！
+            const count = 3000;
+            for(let i=0; i<count; i++) {
+                const isGold = Math.random() > 0.75; // 25% 是金色
+                const mesh = new THREE.Mesh(
+                    isGold ? geoSphere : geoDiamond,
+                    isGold ? matGold : matPink
+                );
+
+                const t = i / count;
+                const angle = t * 60 * Math.PI; // 30圈
+                const h = t * 38 - 18;
+                const r = 14 * (1 - Math.pow(t, 0.7));
 
                 const x = Math.cos(angle) * r;
                 const z = Math.sin(angle) * r;
 
-                mesh.position.set(x, h, z);
-                mesh.rotation.set(Math.random()*3, Math.random()*3, 0);
+                // 增加一点随机抖动，让树更自然
+                mesh.position.set(
+                    x + (Math.random()-0.5)*0.5, 
+                    h + (Math.random()-0.5)*0.5, 
+                    z + (Math.random()-0.5)*0.5
+                );
+                mesh.rotation.set(Math.random()*Math.PI, Math.random()*Math.PI, 0);
 
                 mesh.userData = {
-                    initialY: h,
+                    treePos: mesh.position.clone(),
+                    scatterPos: new THREE.Vector3((Math.random()-0.5)*80, (Math.random()-0.5)*80, (Math.random()-0.5)*80),
+                    speed: Math.random() * 0.03 + 0.01,
                     blinkOffset: Math.random() * 100,
-                    speed: Math.random() * 0.02 + 0.01
+                    phase: Math.random() * Math.PI * 2
                 };
-                
+
                 mainGroup.add(mesh);
                 particles.push(mesh);
             }
+        }
+
+        function createStardust() {
+            const geo = new THREE.BufferGeometry();
+            const pos = [];
+            for(let i=0; i<1000; i++) {
+                pos.push((Math.random()-0.5)*100, (Math.random()-0.5)*80, (Math.random()-0.5)*100);
+            }
+            geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+            const mat = new THREE.PointsMaterial({
+                color: 0xffb6c1, size: 0.2, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending
+            });
+            const dust = new THREE.Points(geo, mat);
+            scene.add(dust);
         }
 
         function animate() {
             requestAnimationFrame(animate);
             time += 0.01;
 
-            mainGroup.rotation.y += 0.002;
+            // 旋转交互
+            mainGroup.rotation.y += 0.003; // 自动慢速旋转
             mainGroup.rotation.y += (mouseX * 0.5 - mainGroup.rotation.y) * 0.05;
-            mainGroup.rotation.x += (mouseY * 0.3 - mainGroup.rotation.x) * 0.05;
+            mainGroup.rotation.x += (mouseY * 0.2 - mainGroup.rotation.x) * 0.05;
 
+            // 树顶星星自转
+            const topper = mainGroup.children[0];
+            if(topper) { topper.rotation.y += 0.02; topper.rotation.z += 0.01; }
+
+            // 粒子动画
             particles.forEach(p => {
                 p.rotation.x += p.userData.speed;
                 p.rotation.y += p.userData.speed;
-                // 呼吸闪烁
-                const s = 1 + Math.sin(time * 3 + p.userData.blinkOffset) * 0.3;
-                p.scale.setScalar(s);
+
+                // 闪烁 (Twinkle) - 模拟钻石反光
+                const blink = Math.sin(time * 3 + p.userData.blinkOffset);
+                if (blink > 0.8) {
+                    p.scale.setScalar(1.5); // 瞬间变大变亮
+                    if(p.material.emissiveIntensity !== undefined) p.material.emissiveIntensity = 1.0;
+                } else {
+                    p.scale.setScalar(1.0);
+                    if(p.material.emissiveIntensity !== undefined) p.material.emissiveIntensity = 0.2;
+                }
+
+                // 模式切换移动
+                const target = mode === 'TREE' ? p.userData.treePos : p.userData.scatterPos;
+                p.position.lerp(target, 0.06);
             });
 
             if(composer) composer.render();
@@ -233,6 +291,10 @@
         function onMouseMove(e) {
             mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
             mouseY = (e.clientY / window.innerHeight - 0.5) * 1;
+        }
+
+        window.toggleMode = function() {
+            mode = mode === 'TREE' ? 'SCATTER' : 'TREE';
         }
 
         function onResize() {
